@@ -1,75 +1,38 @@
-import seaborn as sns
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LinearRegression
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.svm import SVR
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import streamlit as st
+import matplotlib.pyplot as plt
 
-# STAGE 1: Dataset Selection and Exploration
-def load_data(file_path):
-    data = pd.read_csv('sepatu.csv', delimiter=',', encoding="ISO-8859-1")
-    return data
+# Load the data
+data = pd.read_csv('sepatu.csv')
 
-def plot_brand_counts(data):
-    brand_counts = data.groupby('Brand_Name').size().sort_values(ascending=False)
-    plt.figure(figsize=(10, 8))
-    brand_counts.plot(kind='barh', color=sns.color_palette('Dark2', n_colors=len(brand_counts)))
-    plt.gca().spines[['top', 'right']].set_visible(False)
-    plt.xlabel('Jumlah')
-    plt.ylabel('Brand Name')
-    plt.title('Jumlah Brand Terjual')
-    plt.show()
+# Clean the 'How_Many_Sold' column
+data['How_Many_Sold'] = data['How_Many_Sold'].str.replace(',', '').astype(int)
 
-# STAGE 2: Data Preprocessing
-def preprocess_data(data):
-    # Add preprocessing steps here (e.g., scaling, encoding)
-    pass
+# Create a Streamlit app
+st.title('Penjualan Sepatu Berdasarkan Brand')
+st.write('Pilih brand untuk melihat produk dengan penjualan tertinggi.')
 
-# STAGE 3: Model Training
-def train_model(X_train, y_train):
-    models = {
-        'Linear Regression': LinearRegression(),
-        'Decision Tree': DecisionTreeRegressor(),
-        'SVR': SVR()
-    }
-    
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        print(f'{name} model trained.')
-    
-    return models
+# Dropdown menu untuk memilih brand
+brands = data['Brand_Name'].unique()
+selected_brand = st.selectbox('Pilih Brand', brands)
 
-# STAGE 4: Model Evaluation
-def evaluate_model(models, X_test, y_test):
-    for name, model in models.items():
-        predictions = model.predict(X_test)
-        mae = mean_absolute_error(y_test, predictions)
-        mse = mean_squared_error(y_test, predictions)
-        r2 = r2_score(y_test, predictions)
-        print(f'{name} - MAE: {mae}, MSE: {mse}, R2: {r2}')
+# Filter data untuk brand yang dipilih
+brand_data = data[data['Brand_Name'] == selected_brand]
 
-if __name__ == "__main__":
-    # Load data
-    data = load_data('sepatu.csv')
-    
-    # Plot data
-    plot_brand_counts(data)
-    
-    # Preprocess data
-    X, y = preprocess_data(data)
-    
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-    
-    # Train models
-    models = train_model(X_train, y_train)
-    
-    # Evaluate models
-    evaluate_model(models, X_test, y_test)
+# Find the top-selling product for the selected brand
+top_product = brand_data.loc[brand_data['How_Many_Sold'].idxmax()]
+
+# Display the top-selling product details
+st.subheader(f'Top-Selling Product for {selected_brand}')
+st.write(f"Product Details: {top_product['Product_details']}")
+st.write(f"How Many Sold: {top_product['How_Many_Sold']}")
+st.write(f"Current Price: {top_product['Current_Price']}")
+st.write(f"Rating: {top_product['RATING']}")
+
+# Plot the sales data for the selected brand
+fig, ax = plt.subplots()
+ax.barh(brand_data['Product_details'], brand_data['How_Many_Sold'], color='skyblue')
+ax.set_xlabel('How Many Sold')
+ax.set_ylabel('Product Details')
+ax.set_title(f'Sales of {selected_brand} Shoes by Product Details')
+st.pyplot(fig)
