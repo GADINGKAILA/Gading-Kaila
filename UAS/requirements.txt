@@ -1,0 +1,10 @@
+requirements_content = """
+seaborn
+matplotlib
+pandas
+numpy
+scikit-learn
+"""
+
+with open("/mnt/data/requirements.txt", "w") as file:
+    file.write(requirements_content.strip())
