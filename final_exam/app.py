@@ -12,7 +12,7 @@ def home():
     return render_template('home.html')
 
 @app.route('/Predict', methods=['GET', 'POST'])
-def Predict():
+def predict():
     if request.method == 'POST':
         # Extract form data
         data = {
