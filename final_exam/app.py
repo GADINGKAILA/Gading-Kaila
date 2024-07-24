@@ -2,25 +2,30 @@ import streamlit as st
 import joblib
 import pandas as pd
 
-# Load the trained model
+# Ganti dengan jalur absolut ke file model Anda
 import os
 import joblib
 
-# Ganti dengan jalur absolut ke file model Anda
-model_path = os.path.abspath('model.pkl')
+# Tentukan jalur absolut untuk file model
+model_path = os.path.join('/mount/src/gading-kaila/final_exam', 'model.pkl')
+print(f"Attempting to load model from: {model_path}")
+
 if not os.path.isfile(model_path):
     raise FileNotFoundError(f"Model file {model_path} does not exist.")
+
 model = joblib.load(model_path)
 
 import os
+import joblib
 
-model_path = os.path.abspath('model.pkl')
+model_path = os.path.join('/mount/src/gading-kaila/final_exam', 'model.pkl')
 print(f"Attempting to load model from: {model_path}")
 
 if os.path.isfile(model_path):
     print(f"File {model_path} found.")
 else:
     print(f"File {model_path} does not exist.")
+    # Tentukan jalur file yang benar atau periksa lokasi file di server
 
 
 # Streamlit application
