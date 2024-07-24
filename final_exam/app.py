@@ -5,15 +5,22 @@ import pandas as pd
 # Load the trained model
 import os
 import joblib
+
+# Ganti dengan jalur absolut ke file model Anda
+model_path = os.path.abspath('model.pkl')
+if not os.path.isfile(model_path):
+    raise FileNotFoundError(f"Model file {model_path} does not exist.")
+model = joblib.load(model_path)
+
+import os
+
 model_path = os.path.abspath('model.pkl')
 print(f"Attempting to load model from: {model_path}")
+
 if os.path.isfile(model_path):
     print(f"File {model_path} found.")
 else:
     print(f"File {model_path} does not exist.")
-    
-model = joblib.load(model_path)
-
 
 
 # Streamlit application
