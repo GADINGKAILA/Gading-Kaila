@@ -3,7 +3,18 @@ import joblib
 import pandas as pd
 
 # Load the trained model
-model = joblib.load('model.pkl')
+import os
+import joblib
+model_path = os.path.abspath('model.pkl')
+print(f"Attempting to load model from: {model_path}")
+if os.path.isfile(model_path):
+    print(f"File {model_path} found.")
+else:
+    print(f"File {model_path} does not exist.")
+    
+model = joblib.load(model_path)
+
+
 
 # Streamlit application
 def main():
