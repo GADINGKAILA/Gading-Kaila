@@ -5,40 +5,45 @@ import pandas as pd
 # Load the trained model
 model = joblib.load('model.pkl')
 
-st.title('Prediction App')
+# Streamlit application
+def main():
+    st.title('Prediction App')
 
-# Form for input
-with st.form(key='prediction_form'):
-    gender = st.selectbox('Gender', ['Male', 'Female'])
-    marital_status = st.selectbox('Marital Status', ['Single', 'Married'])
-    occupation = st.selectbox('Occupation', ['Employee', 'Student', 'Self Employed'])
-    monthly_income = st.selectbox('Monthly Income', ['No Income', 'Below Rs.10000', '10001 to 25000', '25001 to 50000', 'More than 50000'])
-    educational_qualifications = st.selectbox('Educational Qualifications', ['Graduate', 'Post Graduate', 'Ph.D'])
-    feedback = st.selectbox('Feedback', ['Positive', 'Negative'])
-    age = st.number_input('Age', min_value=0)
-    family_size = st.number_input('Family Size', min_value=1, max_value=10)
-    latitude = st.number_input('Latitude')
-    longitude = st.number_input('Longitude')
-    pin_code = st.number_input('Pin Code')
+    # Form for input
+    with st.form(key='prediction_form'):
+        gender = st.selectbox('Gender', ['Male', 'Female'])
+        marital_status = st.selectbox('Marital Status', ['Single', 'Married'])
+        occupation = st.selectbox('Occupation', ['Employee', 'Student', 'Self Employed'])
+        monthly_income = st.selectbox('Monthly Income', ['No Income', 'Below Rs.10000', '10001 to 25000', '25001 to 50000', 'More than 50000'])
+        educational_qualifications = st.selectbox('Educational Qualifications', ['Graduate', 'Post Graduate', 'Ph.D'])
+        feedback = st.selectbox('Feedback', ['Positive', 'Negative'])
+        age = st.number_input('Age', min_value=0)
+        family_size = st.number_input('Family Size', min_value=1, max_value=10)
+        latitude = st.number_input('Latitude')
+        longitude = st.number_input('Longitude')
+        pin_code = st.number_input('Pin Code')
 
-    submit_button = st.form_submit_button(label='Predict')
+        submit_button = st.form_submit_button(label='Predict')
 
-    if submit_button:
-        # Create DataFrame for prediction
-        data = pd.DataFrame({
-            'Gender': [gender],
-            'Marital Status': [marital_status],
-            'Occupation': [occupation],
-            'Monthly Income': [monthly_income],
-            'Educational Qualifications': [educational_qualifications],
-            'Feedback': [feedback],
-            'Age': [age],
-            'Family size': [family_size],
-            'latitude': [latitude],
-            'longitude': [longitude],
-            'Pin code': [pin_code]
-        })
+        if submit_button:
+            # Create DataFrame for prediction
+            data = pd.DataFrame({
+                'Gender': [gender],
+                'Marital Status': [marital_status],
+                'Occupation': [occupation],
+                'Monthly Income': [monthly_income],
+                'Educational Qualifications': [educational_qualifications],
+                'Feedback': [feedback],
+                'Age': [age],
+                'Family size': [family_size],
+                'latitude': [latitude],
+                'longitude': [longitude],
+                'Pin code': [pin_code]
+            })
 
-        # Predict
-        prediction = model.predict(data)[0]
-        st.write(f'Prediction: {prediction}')
+            # Predict
+            prediction = model.predict(data)[0]
+            st.write(f'Prediction: {prediction}')
+
+if __name__ == "__main__":
+    main()
