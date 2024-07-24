@@ -1,60 +1,44 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import joblib
 import pandas as pd
-
-app = Flask(__name__)
 
 # Load the trained model
 model = joblib.load('model.pkl')
 
-@app.route('/')
-def home():
-    return render_template('home.html')
+st.title('Prediction App')
 
-@app.route('/Predict', methods=['GET', 'POST'])
-def predict():
-    if request.method == 'POST':
-        # Extract form data
-        data = {
-            'Gender': request.form['Gender'],
-            'Marital Status': request.form['Marital Status'],
-            'Occupation': request.form['Occupation'],
-            'Monthly Income': request.form['Monthly Income'],
-            'Educational Qualifications': request.form['Educational Qualifications'],
-            'Feedback': request.form['Feedback'],
-            'Age': request.form['Age'],
-            'Family size': request.form['Family size'],
-            'latitude': request.form['latitude'],
-            'longitude': request.form['longitude'],
-            'Pin code': request.form['Pin code']
-        }
+# Form for input
+with st.form(key='prediction_form'):
+    gender = st.selectbox('Gender', ['Male', 'Female'])
+    marital_status = st.selectbox('Marital Status', ['Single', 'Married'])
+    occupation = st.selectbox('Occupation', ['Employee', 'Student', 'Self Employed'])
+    monthly_income = st.selectbox('Monthly Income', ['No Income', 'Below Rs.10000', '10001 to 25000', '25001 to 50000', 'More than 50000'])
+    educational_qualifications = st.selectbox('Educational Qualifications', ['Graduate', 'Post Graduate', 'Ph.D'])
+    feedback = st.selectbox('Feedback', ['Positive', 'Negative'])
+    age = st.number_input('Age', min_value=0)
+    family_size = st.number_input('Family Size', min_value=1, max_value=10)
+    latitude = st.number_input('Latitude')
+    longitude = st.number_input('Longitude')
+    pin_code = st.number_input('Pin Code')
 
-        # Convert to DataFrame for prediction
-        data_df = pd.DataFrame([data])
-        
-        # Ensure numeric types for certain fields
-        data_df['Age'] = pd.to_numeric(data_df['Age'])
-        data_df['Family size'] = pd.to_numeric(data_df['Family size'])
-        data_df['latitude'] = pd.to_numeric(data_df['latitude'])
-        data_df['longitude'] = pd.to_numeric(data_df['longitude'])
-        data_df['Pin code'] = pd.to_numeric(data_df['Pin code'])
-        
-        # Predict using the loaded model
-        prediction = model.predict(data_df)[0]
-        
-        # Render the result template with prediction
-        return render_template('result.html', prediction=prediction)
-    return render_template('Predict.html')
+    submit_button = st.form_submit_button(label='Predict')
 
-@app.route('/list')
-def list_view():
-    # Placeholder for listing items
-    return render_template('list.html')
+    if submit_button:
+        # Create DataFrame for prediction
+        data = pd.DataFrame({
+            'Gender': [gender],
+            'Marital Status': [marital_status],
+            'Occupation': [occupation],
+            'Monthly Income': [monthly_income],
+            'Educational Qualifications': [educational_qualifications],
+            'Feedback': [feedback],
+            'Age': [age],
+            'Family size': [family_size],
+            'latitude': [latitude],
+            'longitude': [longitude],
+            'Pin code': [pin_code]
+        })
 
-@app.route('/data_customer')
-def datacustomer():
-    # Placeholder for displaying customer data
-    return render_template('data_customer.html')
-
-if __name__ == '__main__':
-    app.run(debug=True)
+        # Predict
+        prediction = model.predict(data)[0]
+        st.write(f'Prediction: {prediction}')
