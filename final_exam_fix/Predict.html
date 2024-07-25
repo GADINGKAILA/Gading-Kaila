@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 500px;
+            margin-top: 50px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enter Data for Prediction</h1>
+    <form action="/predict" method="post">
+        <label for="Gender">Gender:</label>
+        <select name="Gender" id="Gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+
+        <label for="Marital Status">Marital Status:</label>
+        <select name="Marital Status" id="Marital Status">
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+        </select>
+
+        <label for="Occupation">Occupation:</label>
+        <select name="Occupation" id="Occupation">
+            <option value="Employee">Employee</option>
+            <option value="Student">Student</option>
+            <option value="Self Employed">Self Employed</option>
+        </select>
+
+        <label for="Monthly Income">Monthly Income:</label>
+        <select name="Monthly Income" id="Monthly Income">
+            <option value="No Income">No Income</option>
+            <option value="Below Rs.10000">Below Rs.10000</option>
+            <option value="10001 to 25000">10001 to 25000</option>
+            <option value="25001 to 50000">25001 to 50000</option>
+            <option value="More than 50000">More than 50000</option>
+        </select>
+
+        <label for="Educational Qualifications">Educational Qualifications:</label>
+        <select name="Educational Qualifications" id="Educational Qualifications">
+            <option value="Graduate">Graduate</option>
+            <option value="Post Graduate">Post Graduate</option>
+            <option value="Ph.D">Ph.D</option>
+        </select>
+
+        <label for="Feedback">Feedback:</label>
+        <select name="Feedback" id="Feedback">
+            <option value="Positive">Positive</option>
+            <option value="Negative">Negative</option>
+        </select>
+
+        <label for="Age">Age:</label>
+        <input type="number" name="Age" id="Age" placeholder="Age" min="0">
+
+        <label for="Family size">Family Size:</label>
+        <input type="number" name="Family size" id="Family size" placeholder="Family size" min="1" max="10">
+
+        <label for="latitude">Latitude:</label>
+        <input type="text" name="latitude" id="latitude" placeholder="Latitude">
+
+        <label for="longitude">Longitude:</label>
+        <input type="text" name="longitude" id="longitude" placeholder="Longitude">
+
+        <label for="Pin code">Pin Code:</label>
+        <input type="text" name="Pin code" id="Pin code" placeholder="Pin code">
+
+        <input type="submit" value="Predict">
+    </form>
+</body>
+</html>
